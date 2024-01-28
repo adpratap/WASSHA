@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="bindingViewModel"
+            type="com.noreplypratap.wassha.viewmodel.JokeViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        tools:context=".ui.views.JokeFragment">
+
+
+        <TextView
+            android:id="@+id/tvStaticTextJoke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_margin="4dp"
+            android:text="@string/joke"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tvJoke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:text="@{bindingViewModel.joke}"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvLength"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:visibility="gone"
+            app:setLengthAndView="@{bindingViewModel.joke}"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvWordCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:visibility="gone"
+            app:setWordCount="@{bindingViewModel.joke}"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvOfflineDataMsg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="2dp"
+            android:visibility="gone"
+            android:textColor="#B80000"
+            app:isLocal="@{bindingViewModel.isLocal}"
+            android:textSize="12sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:id="@+id/btnFetchJoke"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:onClick="@{() -> bindingViewModel.updateJoke()}"
+            android:text="@string/update_joke" />
+
+    </LinearLayout>
+</layout>
