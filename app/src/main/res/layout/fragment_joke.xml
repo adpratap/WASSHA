@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
-            android:text="@{bindingViewModel.joke}"
+            android:text="@{bindingViewModel.uiJokeModel.joke}"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:visibility="gone"
-            app:setLengthAndView="@{bindingViewModel.joke}"
+            app:setLengthAndView="@{bindingViewModel.uiJokeModel.wordLength}"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="2dp"
             android:visibility="gone"
-            app:setWordCount="@{bindingViewModel.joke}"
+            app:setWordCount="@{bindingViewModel.uiJokeModel.wordCount}"
             android:textSize="14sp"
             android:textStyle="bold" />
 
@@ -63,7 +63,7 @@
             android:layout_margin="2dp"
             android:visibility="gone"
             android:textColor="#B80000"
-            app:isLocal="@{bindingViewModel.isLocal}"
+            app:isLocal="@{bindingViewModel.uiJokeModel.local}"
             android:textSize="12sp"
             android:textStyle="bold" />
 

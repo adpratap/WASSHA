@@ -7,40 +7,29 @@ import androidx.databinding.BindingAdapter
 
 @SuppressLint("SetTextI18n")
 @BindingAdapter("setWordCount")
-fun setWordCount(textView: TextView, value: String?) {
-    if (!value.isNullOrBlank() && value != "null"){
+fun setWordCount(textView: TextView, count: Int) {
+    textView.visibility = View.VISIBLE
+    textView.text = "Words : $count"
+}
+
+@SuppressLint("SetTextI18n")
+@BindingAdapter("setLengthAndView")
+fun setLengthAndView(textView: TextView, length: Int) {
+    if (length > 80) {
+        textView.text = "Length : $length"
         textView.visibility = View.VISIBLE
-        textView.text = "Words : ${countWords(value)}"
     } else {
         textView.visibility = View.GONE
     }
 }
 
 @SuppressLint("SetTextI18n")
-@BindingAdapter("setLengthAndView")
-fun setLengthAndView(textView: TextView, string: String?) {
-    string?.length?.let {
-        if (it > 80){
-            textView.text = "Length : $it"
-            textView.visibility = View.VISIBLE
-        }else {
-            textView.visibility = View.GONE
-        }
-    }
-}
-
-@SuppressLint("SetTextI18n")
 @BindingAdapter("isLocal")
 fun isLocal(textView: TextView, value: Boolean) {
-    if (value){
+    if (value) {
         textView.visibility = View.VISIBLE
         textView.text = "Data was fetched from local"
-    }else {
+    } else {
         textView.visibility = View.GONE
     }
-}
-
-fun countWords(input: String): Int {
-    val words = input.trim().split("\\s+".toRegex())
-    return words.size
 }

@@ -30,6 +30,7 @@ class JokeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
         binding.bindingViewModel = jokeViewModel
+
     }
 
     override fun onDestroyView() {

@@ -4,61 +4,54 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.noreplypratap.wassha.model.ModelJoke
+import com.noreplypratap.wassha.model.UiJokeModel
+import com.noreplypratap.wassha.model.toUiModel
 import com.noreplypratap.wassha.repository.RepositoryImpl
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import retrofit2.Response
 import javax.inject.Inject
 
 @HiltViewModel
 class JokeViewModel @Inject constructor(
     private val repositoryImpl: RepositoryImpl
 ) : ViewModel() {
-
-    private val _joke = MutableLiveData<String>()
-    val joke: LiveData<String> get() = _joke
-
-    private val _isLocal = MutableLiveData<Boolean>()
-    val isLocal: LiveData<Boolean> get() = _isLocal
+    private val _uiJokeModel = MutableLiveData<UiJokeModel>()
+    val uiJokeModel: LiveData<UiJokeModel> get() = _uiJokeModel
 
     init {
-        _isLocal.postValue(false)
         getRemoteData()
     }
 
     private fun getRemoteData() = viewModelScope.launch(Dispatchers.IO) {
-        try {
-            handleResponse(repositoryImpl.getRemoteData())
-        } catch (e: Exception) {
-            getLocalData()
-        }
-    }
-
-    private fun handleResponse(response: Response<ModelJoke>) {
-        if (response.isSuccessful) {
-            response.body()?.let { jokesData ->
-                _joke.postValue(jokesData.joke.toString())
-                _isLocal.postValue(false)
-                savaDataToLocal(jokesData)
+        val data = repositoryImpl.getRemoteData()
+        if (data != null) {
+            data.let {
+                val joke = it.joke.toString()
+                val uiJoke = it.toUiModel(false,countWords(joke),countLength(joke))
+                _uiJokeModel.postValue(uiJoke)
             }
-        } else {
+        }else {
             getLocalData()
         }
     }
 
-    private fun savaDataToLocal(modelJoke: ModelJoke) {
-        viewModelScope.launch(Dispatchers.IO) {
-            repositoryImpl.saveData(modelJoke)
+    private fun getLocalData() = viewModelScope.launch(Dispatchers.IO) {
+        val data = repositoryImpl.getLocalData()
+        data?.let {
+            val joke = it.joke.toString()
+            val uiJoke = it.toUiModel(true,countWords(joke),countLength(joke))
+            _uiJokeModel.postValue(uiJoke)
         }
     }
 
-    private fun getLocalData() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _isLocal.postValue(true)
-            _joke.postValue(repositoryImpl.getLocalData()?.joke.toString())
-        }
+    private fun countWords(input: String): Int {
+        val words = input.trim().split("\\s+".toRegex())
+        return words.size
+    }
+
+    private fun countLength(string: String): Int {
+        return string.length
     }
 
     fun updateJoke() {
